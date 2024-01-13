@@ -13,6 +13,7 @@ mongoose.connect('mongodb+srv://se552733:INMO6gyvYwigenNA@cluster0.gkqdxhl.mongo
 });
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/user', userRoutes);
 app.use('/question', questionRoutes);
 app.use('/quiz', quizRoutes);
