@@ -7,10 +7,7 @@ const quizRoutes = require('./routes/quizRoutes');
 
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/quizapp', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+
 
 app.use(bodyParser.json());
 app.use('/user', userRoutes);
