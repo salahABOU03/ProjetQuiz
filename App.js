@@ -4,10 +4,11 @@ const bodyParser = require('body-parser');
 const userRoutes = require('./routes/userRoutes');
 const questionRoutes = require('./routes/questionRoutes');
 const quizRoutes = require('./routes/quizRoutes');
+require('dotenv').config();
 
 const app = express();
 
-mongoose.connect('mongodb+srv://se552733:INMO6gyvYwigenNA@cluster0.gkqdxhl.mongodb.net/Quiz_db', {
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
