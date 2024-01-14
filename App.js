@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const userRoutes = require('./routes/userRoutes');
 const questionRoutes = require('./routes/questionRoutes');
 const quizRoutes = require('./routes/quizRoutes');
+const attemptRoutes = require('./routes/attemptRoutes');
 require('dotenv').config();
 const cors = require('cors');
 
@@ -23,9 +24,10 @@ app.use(cors());
 
 
 
-app.use(userRoutes);
-app.use('/question', questionRoutes);
-app.use('/quiz', quizRoutes);
+app.use('/users', userRoutes);
+app.use('/questions', questionRoutes);
+app.use('/quizzes', quizRoutes);
+app.use('/attempts', attemptRoutes);
 
 
 const PORT = 3000;
