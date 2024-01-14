@@ -1,11 +1,9 @@
 const mongoose = require('mongoose');
+const Option = require('./Option');
 
 const questionSchema = new mongoose.Schema({
-  text: String,
-  options: [{
-    text: String,
-    isCorrect: Boolean,
-  }],
+  text: { type: String, required: true },
+  options: [Option.schema],
 });
 
 const Question = mongoose.model('Question', questionSchema);
