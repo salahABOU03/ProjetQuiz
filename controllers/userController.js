@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 exports.registerUser = async (req, res) => {
   try {
@@ -32,7 +33,7 @@ exports.loginUser = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({ success: false, message: 'Invalid username or password' });
     }
-    
+
     const userData = {
       _id: user._id,
       fullName: user.fullName,
@@ -40,7 +41,14 @@ exports.loginUser = async (req, res) => {
       role: user.role,
     };
 
-    res.status(200).json({success: true, user: userData });
+    const token = jwt.sign({user:req.body}, "XYZ", {expiresIn:"20h"});
+    res.json({
+        success:true,
+        token,
+        user: userData
+    })
+
+   
   }catch (error) {
     res.status(500).json({success: false, error: error.message });
   }

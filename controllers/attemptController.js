@@ -53,8 +53,43 @@ const getAttemptsByStudent = async (req, res) => {
   }
 };
 
+// get attempts by quiz ID
+const getAttemptByQuizId = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Fetch attempts based on the provided quiz ID
+    const attempts = await Attempt.find({ quiz: id })
+      .populate('student')
+      .populate({
+        path: 'quiz',
+        populate: {
+          path: 'questions',
+          populate: {
+            path: 'options',
+          },
+        },
+      })
+      .populate({
+        path: 'answers',
+        populate: {
+          path: 'question',
+          populate: {
+            path: 'options',
+          },
+        },
+      });
+
+    res.status(200).json(attempts);
+  } catch (error) {
+    console.error('Error fetching attempts by quiz ID', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 module.exports = {
   createAttempt,
   getAllAttempts,
   getAttemptsByStudent,
+  getAttemptByQuizId
 };

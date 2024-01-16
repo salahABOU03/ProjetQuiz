@@ -11,4 +11,7 @@ router.get('/', attemptController.getAllAttempts);
 // Get attempts by student ID
 router.get('/student/:studentId', attemptController.getAttemptsByStudent);
 
+// Get attempts by quiz ID
+router.get('/quiz/:id', attemptController.getAttemptByQuizId);
+
 module.exports = router;
