@@ -5,11 +5,14 @@ const attemptSchema = new mongoose.Schema({
   quiz: { type: mongoose.Schema.Types.ObjectId, ref: 'Quiz', required: true },
   answers: [{
     question: { type: mongoose.Schema.Types.ObjectId, ref: 'Question', required: true },
-    selectedOption: { type: mongoose.Schema.Types.ObjectId, ref: 'Option', required: true },
+    selectedOption: {
+      text: { type: String, required: true },
+      isCorrect: { type: Boolean, default: false },
+    },
   }],
-
 });
 
 const Attempt = mongoose.model('Attempt', attemptSchema);
 
 module.exports = Attempt;
+

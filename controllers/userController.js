@@ -14,9 +14,9 @@ exports.registerUser = async (req, res) => {
 
     const user = await new User({ fullName, username, password:hashedPass, role });
     await user.save();
-    res.status(201).json({ message: 'User created', user });
+    res.status(201).json({success:true, message: 'Account created', user });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({success:false, error: error.message });
   }
 };
 
@@ -26,11 +26,11 @@ exports.loginUser = async (req, res) => {
     const user = await User.findOne({ username });
 
     if (!user) {
-      return res.status(401).json({ message: 'Invalid username or password' });
+      return res.status(401).json({success: false, message: 'Invalid username or password' });
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ message: 'Invalid username or password' });
+      return res.status(401).json({ success: false, message: 'Invalid username or password' });
     }
     
     const userData = {
@@ -40,8 +40,8 @@ exports.loginUser = async (req, res) => {
       role: user.role,
     };
 
-    res.status(200).json({ user: userData });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(200).json({success: true, user: userData });
+  }catch (error) {
+    res.status(500).json({success: false, error: error.message });
   }
 };

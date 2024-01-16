@@ -5,7 +5,27 @@ const Question = require('../models/Question');
 exports.createQuiz = async (req, res) => {
   try {
     const { title, questions, professor_id } = req.body;
-    const quiz = await new Quiz({ title, questions, professor: professor_id });
+
+    // Map the provided questions to their corresponding Question documents
+    const questionIds = await Promise.all(questions.map(async (question) => {
+      const { text, options } = question;
+
+      const newQuestion = new Question({
+        text,
+        options,
+      });
+
+      const savedQuestion = await newQuestion.save();
+      return savedQuestion._id;
+    }));
+
+    // Create the quiz using the mapped questionIds
+    const quiz = new Quiz({
+      title,
+      questions: questionIds,
+      professor: professor_id,
+    });
+
     await quiz.save();
     res.status(201).json(quiz);
   } catch (error) {
@@ -27,7 +47,12 @@ exports.getAllQuizzes = async (req, res) => {
 // Get a specific quiz by ID
 exports.getQuizById = async (req, res) => {
   try {
+    // finding the quiz by id
     const quiz = await Quiz.findById(req.params.quizId);
+    // finding the questions by id
+    const questions = await Question.find({ _id: { $in: quiz.questions } });
+    // adding the questions to the quiz
+    quiz.questions = questions;
     if (!quiz) {
       return res.status(404).json({ error: 'Quiz not found' });
     }
